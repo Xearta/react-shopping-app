@@ -95,4 +95,10 @@ class Products extends Component {
   }
 }
 
-export default connect(null, { fetchProducts })(Products);
+const mapStateToProps = state => {
+  return {
+    products: state.products.filteredItems,
+  };
+};
+
+export default connect(mapStateToProps, { fetchProducts })(Products);
