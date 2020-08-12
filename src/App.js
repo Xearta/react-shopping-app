@@ -7,9 +7,13 @@ import Cart from './components/Cart';
 class App extends React.Component {
   state = {
     products: data.products,
-    cartItems: [],
+    cartItems: localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [],
     size: '',
     sort: '',
+  };
+
+  createOrder = order => {
+    alert('Need to save order for ' + order.name);
   };
 
   removeFromCart = product => {
@@ -17,6 +21,7 @@ class App extends React.Component {
     this.setState({
       cartItems: cartItems.filter(x => x._id !== product._id),
     });
+    localStorage.setItem('cartItems', JSON.stringify(cartItems.filter(x => x._id !== product._id)));
   };
 
   addToCart = product => {
@@ -33,6 +38,7 @@ class App extends React.Component {
     }
 
     this.setState({ cartItems: cartItems });
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
   };
 
   sortProducts = event => {
@@ -91,7 +97,11 @@ class App extends React.Component {
               <Products products={this.state.products} addToCart={this.addToCart} />
             </div>
             <div className='sidebar'>
-              <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart} />
+              <Cart
+                cartItems={this.state.cartItems}
+                removeFromCart={this.removeFromCart}
+                createOrder={this.createOrder}
+              />
             </div>
           </div>
         </main>
